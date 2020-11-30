@@ -190,7 +190,7 @@ export default {
     }
   }
   .home-blog-wrapper {
-    display flex
+    display: flex;
     align-items: flex-start;
     margin 20px auto 0
     padding 0 20px
@@ -205,30 +205,30 @@ export default {
       }
     }
     .info-wrapper {
-      position -webkit-sticky;
-      position sticky;
-      top 70px
-      overflow hidden
-      transition all .3s
-      margin-left 15px
-      flex 0 0 300px
-      height auto
-      box-shadow var(--box-shadow)
-      border-radius $borderRadius
-      box-sizing border-box
-      padding 0 15px
-      background var(--background-color)
+      position: -webkit-sticky;
+      position: sticky;
+      top: 70px;
+      overflow: hidden;
+      transition: all .3s;
+      margin-left: 15px;
+      flex: 0 0 300px;
+      height: auto;
+      box-shadow: var(--box-shadow);
+      border-radius: $borderRadius;
+      box-sizing: border-box;
+      padding: 0 15px;
+      background: var(--background-color);
       &:hover {
-        box-shadow var(--box-shadow-hover)
+        box-shadow: var(--box-shadow-hover);
       }
       h4 {
-        color var(--text-color)
+        color: var(--text-color);
       }
       .category-wrapper {
         list-style none
         padding-left 0
         .category-item {
-          margin-bottom .4rem
+          margin-bottom: .4rem;
           padding: .4rem .8rem;
           transition: all .5s
           border-radius $borderRadius
@@ -237,22 +237,22 @@ export default {
           &:hover {
             transform scale(1.04)
             a {
-              color $accentColor
+              color: $accentColor;
             }
           }
           a {
-            display flex
-            justify-content: space-between
-            color var(--text-color)
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-color);
             .post-num {
-              width 1.6rem;
-              height 1.6rem
-              text-align center
-              line-height 1.6rem
-              border-radius $borderRadius
-              background #eee
-              font-size 13px
-              color #fff
+              width: 1.6rem;
+              height: 1.6rem;
+              text-align: center;
+              line-height: 1.6rem;
+              border-radius: $borderRadius;
+              background: #eee;
+              font-size: 13px;
+              color: #fff;
             }
           }
         }
@@ -264,7 +264,7 @@ export default {
 @media (max-width: $MQMobile) {
   .home-blog {
     .hero {
-      height 450px
+      height: 450px;
       img {
         max-height: 210px;
         margin: 2rem auto 1.2rem;
@@ -287,13 +287,12 @@ export default {
     .home-blog-wrapper {
       display block!important
       .blog-list {
-        width auto
+        width: auto;
       }
       .info-wrapper {
-        // display none!important
-        margin-left 0
+        margin-left: 0;
         .personal-info-wrapper {
-          display none
+          display: none;
         }
       }
     }
@@ -315,7 +314,7 @@ export default {
       }
 
       h1, .description, .action {
-        // margin: 1.2rem auto;
+        /**margin: 1.2rem auto; */ 
       }
 
       .description {
@@ -331,13 +330,13 @@ export default {
     .home-blog-wrapper {
       display block!important
       .blog-list {
-        width auto
+        width: auto;
       }
       .info-wrapper {
         // display none!important
         margin-left 0
         .personal-info-wrapper {
-          display none
+          display: none;
         }
       }
     }

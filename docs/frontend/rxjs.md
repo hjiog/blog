@@ -10,7 +10,7 @@ categories:
 # Operators
 
 - ### combineLatest
-<!-- more -->
+
 将两个流最新的数据进行操作，一旦任意一个流发出新数据便会触发
 
 ```js

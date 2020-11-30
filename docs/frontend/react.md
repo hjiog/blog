@@ -37,8 +37,6 @@ categories:
 
 
 
-
-
 ## redux使用流程
 
 1. createStore，接收一个函数，函数中的参数包括state和action

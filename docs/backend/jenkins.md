@@ -13,6 +13,6 @@ jenkins初始密码：
 `
  cat /var/lib/jenkins/secrets/initialAdminPassword
 `
-<!-- more -->
+
 或者
 `cat /var/jenkins_home/secrets/initialAdminPassword`

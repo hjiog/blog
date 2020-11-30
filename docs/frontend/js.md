@@ -29,7 +29,6 @@ console.log(arr)//arr=[1,2,3]
 arr.length=0;
 console.log(arr)//arr=[]
 ```
-<!-- more -->
 
 ### 数组克隆
 

@@ -13,9 +13,9 @@ categories:
 
 流程图如下：
 
-![](../img/myVue.png)
+![流程图](/myVue.png)
 
-<!-- more -->
+
 
 实现代码：
 

@@ -7,7 +7,7 @@ categories:
 ---
 
 ## bootstrap相关
-<!-- more -->
+
 - m-0等价于{margin:0 !important}
 - m-1等价于{margin:0.25rem !important}
 - m-2等价于{margin:0.5rem !important}
