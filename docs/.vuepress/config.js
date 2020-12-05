@@ -5,9 +5,9 @@ module.exports = {
   title: "hjiog的小小窝",
   description: "记录学习生活的点点滴滴",
   head: [
-    ["link", { rel: "icon", href: "/logo.ico" }],
+    ["link", { rel: "icon", href: "/favicon.ico" }],
     //增加manifest.json
-    ["link", { rel: "manifest", href: "/manifest.json" }],
+    ["link", { rel: "manifest", href: "/mainfest.json" }],
     [
       "meta",
       {

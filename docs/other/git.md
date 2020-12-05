@@ -179,3 +179,6 @@ git checkout --patch A a
    ```
 
 - 遇到"您的配置中指定要合并远程的引用\<xxxxx>,但是没有获取到这个引用。"这个问题时，请检查远程仓库是否有\<xxxxx>这个分支
+
+- .gitignore 失效
+git rm -r --cached xxx

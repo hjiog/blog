@@ -1,6 +1,6 @@
 module.exports = {
   type: "blog",
-  logo: "/logo.ico",
+  logo: "/favicon.ico",
   // 博客配置
   blogConfig: {
     category: {
