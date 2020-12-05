@@ -2,7 +2,7 @@
 title: mac 快捷键
 date: 2020-11-11
 tags:
- - git
+ - mac
 categories:
  - 其他
 ---

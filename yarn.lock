@@ -1235,6 +1235,11 @@
     valine "^1.4.14"
     vssue "^1.4.6"
 
+"@vuepress-reco/vuepress-plugin-kan-ban-niang@^1.0.5":
+  version "1.0.5"
+  resolved "https://bnpm.byted.org/@vuepress-reco/vuepress-plugin-kan-ban-niang/download/@vuepress-reco/vuepress-plugin-kan-ban-niang-1.0.5.tgz#73b47094f1a07af05923fe9ae6c25a4c33586168"
+  integrity sha1-c7RwlPGgevBZI/6a5sJaTDNYYWg=
+
 "@vuepress-reco/vuepress-plugin-loading-page@^1.5.7":
   version "1.5.7"
   resolved "https://registry.npm.taobao.org/@vuepress-reco/vuepress-plugin-loading-page/download/@vuepress-reco/vuepress-plugin-loading-page-1.5.7.tgz#b673d10cb18a579008c3487d860984c81cffd340"
@@ -8541,11 +8546,6 @@ vuepress-plugin-smooth-scroll@^0.0.9:
   integrity sha1-bF0B22De89e5drU0BOVrl9qejzk=
   dependencies:
     smoothscroll-polyfill "^0.4.4"
-
-vuepress-plugin-sponsor@^1.0.0:
-  version "1.0.0"
-  resolved "https://bnpm.byted.org/vuepress-plugin-sponsor/download/vuepress-plugin-sponsor-1.0.0.tgz#376e21efc98d6ae271db4aaaa04cf5206b2c74f0"
-  integrity sha1-N24h78mNauJx20qqoEz1IGssdPA=
 
 vuepress-theme-reco@^1.5.7:
   version "1.5.7"

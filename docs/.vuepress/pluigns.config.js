@@ -32,33 +32,6 @@ module.exports = [
   ],
 
   [
-    "vuepress-plugin-helper-live2d",
-    {
-      // 是否开启控制台日志打印(default: false)
-      log: false,
-      live2d: {
-        // 是否启用(关闭请设置为false)(default: true)
-        enable: true,
-        // 模型名称(default: hibiki)
-        model: "koharu",
-        display: {
-          position: "right", // 显示位置：left/right(default: 'right')
-          width: 135, // 模型的长度(default: 135)
-          height: 300, // 模型的高度(default: 300)
-          hOffset: 65, //  水平偏移(default: 65)
-          vOffset: 0, //  垂直偏移(default: 0)
-        },
-        mobile: {
-          show: false, // 是否在移动设备上显示(default: false)
-        },
-        react: {
-          opacity: 0.8, // 模型透明度(default: 0.8)
-        },
-      },
-    },
-  ],
-
-  [
     "meting",
     {
       auto: "https://music.163.com/#/playlist?id=4935340236",
@@ -90,6 +63,23 @@ module.exports = [
       selector: ".page img",
     },
   ],
+  [
+    require("./plugins/vuepress-plugin-kan-ban-niang"),
+    {
+      theme: ["koharu", "wanko", "miku"],
+      messages: {
+        welcome: "欢迎来到hjiog的小小窝",
+        home: "心里的花，我想要带你回家。",
+        theme: "好吧，希望你能喜欢我的其他小伙伴。",
+        close: "你知道我喜欢吃什么吗？痴痴地望着你。",
+      },
+      messageStyle: { right: "68px", bottom: "190px" },
+      modelStyle: { right: "90px", bottom: "-20px", opacity: "0.9" },
+      btnStyle: { right: "90px", bottom: "40px" },
+      width: 150,
+      height: 220,
+    },
+  ],
   ["go-top"],
   ["@vuepress/nprogress"],
 ];
@@ -109,36 +99,6 @@ module.exports = [
 //   },
 //   closeOnce: false
 // }]
-
-// [
-//   "@vuepress-reco/vuepress-plugin-kan-ban-niang",
-//   {
-//     theme: [
-//       "koharu",
-//       "blackCat",
-//       "whiteCat",
-//       "haru1",
-//       "haru2",
-//       "haruto",
-//       "izumi",
-//       "shizuku",
-//       "wanko",
-//       "miku",
-//       "z16",
-//     ],
-//     messages: {
-//       welcome: "欢迎来到hjiog的小小窝",
-//       home: "心里的花，我想要带你回家。",
-//       theme: "好吧，希望你能喜欢我的其他小伙伴。",
-//       close: "你知道我喜欢吃什么吗？痴痴地望着你。",
-//     },
-//     messageStyle: { right: "68px", bottom: "190px" },
-//     modelStyle: { right: "90px", bottom: "-20px", opacity: "0.9" },
-//     btnStyle: { right: "90px", bottom: "40px" },
-//     width: 150,
-//     height: 220,
-//   },
-// ],
 
 // [
 //   "vuepress-plugin-sponsor",

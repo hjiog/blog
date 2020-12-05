@@ -9,9 +9,9 @@ categories:
 
 ## git 相关
 
-##  基础
+### 基础
 
-### 分支合并
+#### 分支合并
 
 在master上执行：
 
@@ -21,7 +21,7 @@ categories:
 - git rebase fix another ==>  将another  分支追加到 fix ，若another为空，则将当前所在的分支追加
 - git cherry-pick c1 c9 ==> 创建两个新节点，将c1 和 c9 的提交分别追加进去，master最后位于 c9 节点，当然追加的数量是任意的，例如 git cherry-pick c1 c4 c8
 
-### 分支移动
+#### 分支移动
 
 - git checkout 哈希值  ==> 移动到该值对应的节点
 
@@ -33,13 +33,13 @@ categories:
 
 - git branch -f master (哈希值｜HEAD^| HEAD~7) ==> HEAD不变，master分支移动到对应的位置
 
-### 撤销历史
+#### 撤销历史
 
 - git reset  (哈希值｜HEAD^| HEAD~7)  ==> 用于回退本地分支，本地仓库回退后对子节点不可见
 
 - git revert  (哈希值｜HEAD^| HEAD~7)  ==> 用于回退远程分支，将回退的操作加到一个新节点，这样既可以达到回退的效果而原来的节点也没有变
 
-### 远程相关
+#### 远程相关
 
 - 分支不存在
 
@@ -57,27 +57,24 @@ git branch -u o/master foo   foo省略的话默认是当前分支
 
 - git push origin :foo ==> 通过给 push 传空值 source，删除本地的 origin/foo 分支和远程仓库中的 `foo` 分支
 
-### Tag 相关
+#### Tag 相关
 
 - git tag v1.0 c1 ==> 在 c1 的节点上打上tag v1.0
 
-- git describe master ==>  输出离master最近的tag信息，格式为<tag>_<numCommits>_g<hash>，如 v0_2_gC2 表示 master 所在节点的哈希值为C2 , 最近的tag是v0 , 距离master有2个节点的距离
+- git describe master ==>  输出离master最近的tag信息，格式为\<tag>_\<numCommits>_g\<hash>，如 v0_2_gC2 表示 master 所在节点的哈希值为C2 , 最近的tag是v0 , 距离master有2个节点的距离
 
-### 其他
+#### 其他
 
 - git rebase -i c1  ==> 以交互式的方式调整c1到当前HEAD的各节点顺序，还可以直接排除某个节点，然后根据你操作的结果生成新的节点
 
 
-
 ### git 设置公钥
-`ssh-keygen -t rsa -C "youremail@abc.com"`
 
-<!-- more -->
---------------
+`ssh-keygen -t rsa -C "youremail@abc.com"`
 
 ### 解决git clone 慢的问题
 
-````bash
+```bash
 nslookup github.global.ssl.fastly.Net
 nslookup github.com
 # 将找到的ip地址写入/etc/host
@@ -85,9 +82,7 @@ nslookup github.com
 151.101.229.194 github.global.ssl.fastly.Net
 # 刷新dns缓存
 # manjaro linux系统下使用命令： sudo systemctl restart NetworkManager.service
-````
-
--------------
+```
 
 ### 小技巧
 
@@ -148,8 +143,6 @@ git checkout --patch A a
 > e - 手动编辑当前的hunk
 > ? - 输出帮助信息
 
---------
-
 ### git clone 部分文件夹
 
 1. 新建一个文件夹，在该目录运行bash
@@ -185,8 +178,4 @@ git checkout --patch A a
    git pull origin master
    ```
 
-
-
-------------
-
-- 遇到"您的配置中指定要合并远程的引用<xxxxx>,但是没有获取到这个引用。"这个问题时，请检查远程仓库是否有<xxxxx>这个分支
+- 遇到"您的配置中指定要合并远程的引用\<xxxxx>,但是没有获取到这个引用。"这个问题时，请检查远程仓库是否有\<xxxxx>这个分支
