@@ -1,5 +1,5 @@
 module.exports = {
-  type: 'blog',
+  type: "blog",
   logo: "/logo.ico",
   // 博客配置
   blogConfig: {
@@ -16,27 +16,12 @@ module.exports = {
   author: "hjiog",
   authorAvatar: "/head.jpeg",
 
-  nav: [
-    {
-      text: "Languages",
-      ariaLabel: "Language Menu",
-      items: [
-        {
-          text: "Chinese",
-          items: [
-            { text: "test", link: "language" },
-            { text: "test2", link: "chinese" },
-          ],
-        },
-        { text: "Japanese", link: "japanese" },
-      ],
-    },
-    { text: "TimeLine", link: "/timeline/", icon: "reco-date" },
-  ],
+  nav: [{ text: "总览", link: "/timeline/", icon: "reco-date" }],
   sidebar: "auto",
   sidebarDepth: 2,
   displayAllHeaders: true, // 默认值：false
   smoothScroll: true,
+  // gitee 评论插件
   // vssueConfig: {
   //   platform: "gitee",
   //   owner: "hjiog",
@@ -50,4 +35,13 @@ module.exports = {
     appId: "Oyqhe2S5wF1eqXwaAWhtN1N7-gzGzoHsz", // your appId
     appKey: "FNiKgxUKRWs4rt8VTpPHbubj", // your appKey
   },
-}
+  /**
+   * support for
+   * 'default'
+   * 'funky'
+   * 'okaidia'
+   * 'solarizedlight'
+   * 'tomorrow'
+   */
+  codeTheme: "tomorrow", // default 'tomorrow'
+};
