@@ -16,7 +16,17 @@ module.exports = {
   author: "hjiog",
   authorAvatar: "/head.jpeg",
 
-  nav: [{ text: "总览", link: "/timeline/", icon: "reco-date" }],
+  nav: [
+    { text: "总览", link: "/timeline/", icon: "reco-date" },
+    {
+      text: "工具·游戏",
+      items: [
+        { text: "制作属于你的一首曲子吧", link: "/pages/DrumKit.md" },
+        { text: "图片处理", link: "/pages/PictureTool.md" },
+        { text: "中国象棋", link: "/vue-chess" },
+      ],
+    },
+  ],
   sidebar: "auto",
   sidebarDepth: 2,
   displayAllHeaders: true, // 默认值：false

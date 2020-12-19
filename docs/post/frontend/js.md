@@ -271,6 +271,10 @@ nums.forEach(v=>console.log(v)) // 输出10个`0`
 返回一个boolean，判断是否有元素是否符合func条件(有一个就行)（并没有改变原数组
 		return true/false 终止
 
+#### find()
+
+返回符合条件的value
+
 **some中同样不能用break和continue中断,用return或return false能达到类似continue的效果,用return true 能退出整个循环**
 
 #### every()

@@ -43,7 +43,7 @@ module.exports = [
       },
       aplayer: {
         lrcType: 3,
-        autoplay: true,
+        autoplay: false,
       },
     },
   ],

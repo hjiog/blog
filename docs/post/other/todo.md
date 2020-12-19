@@ -12,6 +12,10 @@ Babel 使用
 
 Angular/ts 注解
 
+了解项目中babel和pm2的使用
+
+
+
 todo
 
 Ferry  流程 idl如何用

@@ -198,6 +198,14 @@ line-height(行高)=font-size(字符大小)+word-spasing(上下行间距)
 
 * margin:0 auto; 可以使盒子居中，text-align:center; 可以使此盒子内的内联元素居中，故有时需要两者结合使用才能使得盒子及其中文本一起居中。
 
+
+
+## 换行失效
+
+需使用`white-space: normal`
+
+
+
 ## css3动态计算宽度
 
 ``` css

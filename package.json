@@ -5,6 +5,7 @@
     "@vuepress/plugin-medium-zoom": "^1.7.1",
     "@vuepress/plugin-nprogress": "^1.7.1",
     "@vuepress/plugin-pwa": "^1.7.1",
+    "core-js": "2",
     "vuepress": "^1.7.1",
     "vuepress-plugin-cursor-effects": "^1.0.0",
     "vuepress-plugin-dynamic-title": "^1.0.0",
@@ -17,5 +18,9 @@
   "scripts": {
     "dev": "vuepress dev docs",
     "build": "vuepress build docs"
+  },
+  "dependencies": {
+    "ant-design-vue": "^1.7.2",
+    "element-ui": "^2.14.1"
   }
 }

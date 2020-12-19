@@ -91,7 +91,7 @@ categories:
 
   >  背景知识介绍：
   >
-  > viewContentRef引用<ng-container>标签，<ng-container>是angular里的一种映射，在没有真的内容出现的时候，<ng-container>只是一个隐式的占位符，最后动态生成的元素会被填充到这个占位符中，由viewContentRef的实例使用自带的API来创建元素，元素应该是一开始就写好的，但是其DOM结果没有被渲染出来，在angular中<ng-template>中的内容会被忽略，我们需要做的是创建<ng-tempate>的引用，然后给到viewContentRef的实例<ng-tempate>中的元素自然会被显示出来
+  > viewContentRef引用\<ng-container>标签，\<ng-container>是angular里的一种映射，在没有真的内容出现的时候，\<ng-container>只是一个隐式的占位符，最后动态生成的元素会被填充到这个占位符中，由viewContentRef的实例使用自带的API来创建元素，元素应该是一开始就写好的，但是其DOM结果没有被渲染出来，在angular中\<ng-template>中的内容会被忽略，我们需要做的是创建\<ng-tempate>的引用，然后给到viewContentRef的实例\<ng-tempate>中的元素自然会被显示出来
 
   >  创建元素:
 
