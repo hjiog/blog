@@ -82,6 +82,9 @@ module.exports = [
   ],
   ["go-top"],
   ["@vuepress/nprogress"],
+  [
+    require("./plugins/vuepress-plugin-snow-falling"),
+  ],
 ];
 
 // ["@vuepress-yard/vuepress-plugin-window",{

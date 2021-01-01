@@ -1,0 +1,14 @@
+{
+  "name": "vuepress-plugin-snow-falling",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "vuePress",
+    "plugins",
+    "snow",
+    "css"
+  ],
+  "author": "hjiog",
+  "description": "雪花飘落效果"
+}
