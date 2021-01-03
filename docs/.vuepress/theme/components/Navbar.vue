@@ -1,33 +1,37 @@
 <template>
   <header class="navbar">
-    <SidebarButton @toggle-sidebar="$emit('toggle-sidebar')"/>
+    <SidebarButton @toggle-sidebar="$emit('toggle-sidebar')" />
 
-    <router-link
-      :to="$localePath"
-      class="home-link">
+    <router-link :to="$localePath" class="home-link">
       <img
         class="logo"
         v-if="$themeConfig.logo"
         :src="$withBase($themeConfig.logo)"
-        :alt="$siteTitle">
-      <span
-        ref="siteName"
-        class="site-name"
-        v-if="$siteTitle">{{ $siteTitle }}</span>
+        :alt="$siteTitle"
+      />
+      <span ref="siteName" class="site-name" v-if="$siteTitle">{{
+        $siteTitle
+      }}</span>
     </router-link>
 
     <div
       class="links"
-      :style="linksWrapMaxWidth ? {
-        'max-width': linksWrapMaxWidth + 'px'
-      } : {}">
-
+      :style="
+        linksWrapMaxWidth
+          ? {
+              'max-width': linksWrapMaxWidth + 'px'
+            }
+          : {}
+      "
+    >
       <Mode />
-      <AlgoliaSearchBox
-        v-if="isAlgoliaSearch"
-        :options="algolia"/>
-      <SearchBox v-else-if="$themeConfig.search !== false && $frontmatter.search !== false"/>
-      <NavLinks class="can-hide"/>
+      <AlgoliaSearchBox v-if="isAlgoliaSearch" :options="algolia" />
+      <SearchBox
+        v-else-if="
+          $themeConfig.search !== false && $frontmatter.search !== false
+        "
+      />
+      <NavLinks class="can-hide" />
     </div>
   </header>
 </template>
@@ -40,23 +44,33 @@ import NavLinks from '@theme/components/NavLinks'
 import Mode from '@theme/components/Mode'
 
 export default {
-  components: { SidebarButton, NavLinks, SearchBox, AlgoliaSearchBox, Mode },
+  components: {
+    SidebarButton,
+    NavLinks,
+    SearchBox,
+    AlgoliaSearchBox,
+    Mode
+  },
 
-  data () {
+  data() {
     return {
       linksWrapMaxWidth: null
     }
   },
 
-  mounted () {
+  mounted() {
     const MOBILE_DESKTOP_BREAKPOINT = 719 // refer to config.styl
-    const NAVBAR_VERTICAL_PADDING = parseInt(css(this.$el, 'paddingLeft')) + parseInt(css(this.$el, 'paddingRight'))
+    const NAVBAR_VERTICAL_PADDING =
+      parseInt(css(this.$el, 'paddingLeft')) +
+      parseInt(css(this.$el, 'paddingRight'))
     const handleLinksWrapWidth = () => {
       if (document.documentElement.clientWidth < MOBILE_DESKTOP_BREAKPOINT) {
         this.linksWrapMaxWidth = null
       } else {
-        this.linksWrapMaxWidth = this.$el.offsetWidth - NAVBAR_VERTICAL_PADDING -
-          (this.$refs.siteName && this.$refs.siteName.offsetWidth || 0)
+        this.linksWrapMaxWidth =
+          this.$el.offsetWidth -
+          NAVBAR_VERTICAL_PADDING -
+          ((this.$refs.siteName && this.$refs.siteName.offsetWidth) || 0)
       }
     }
     handleLinksWrapWidth()
@@ -64,21 +78,21 @@ export default {
   },
 
   computed: {
-    algolia () {
+    algolia() {
       return this.$themeLocaleConfig.algolia || this.$themeConfig.algolia || {}
     },
 
-    isAlgoliaSearch () {
+    isAlgoliaSearch() {
       return this.algolia && this.algolia.apiKey && this.algolia.indexName
     }
   },
 
   methods: {
-    throttle (func, delay) {
+    throttle(func, delay) {
       let timer = null
       let startTime = Date.now()
 
-      return function () {
+      return function() {
         const curTime = Date.now()
         const remaining = delay - (curTime - startTime)
         const context = this
@@ -96,7 +110,7 @@ export default {
   }
 }
 
-function css (el, property) {
+function css(el, property) {
   // NOTE: Known bug, will return 'auto' if style value is 'auto'
   const win = el.ownerDocument.defaultView
   // null means not to return pseudo styles

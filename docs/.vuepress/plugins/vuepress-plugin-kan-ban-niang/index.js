@@ -1,16 +1,35 @@
 const { resolve } = require('path')
+const glob = require('glob')
 
 module.exports = (options, context) => ({
   define () {
+    const model = {
+      themeName: [],
+      config: {}
+    }
+    const ModelFolder = './docs/.vuepress/public/live2d/**/*model*.json';
+    const themeNameSet = new Set()
+    glob.sync(ModelFolder).forEach(function (path) {
+      const pathArray = path.split('/')
+      themeNameSet.add(pathArray[5])
+      if (model.config[pathArray[5]]) {
+        model.config[pathArray[5]].push(pathArray.slice(4).join('/'))
+      } else {
+        model.config[pathArray[5]] = [pathArray.slice(4).join('/')]
+      }
+    })
+    model.themeName = Array.from(themeNameSet)
     const { clean, messages, theme, modelStyle, btnStyle, width, height, messageStyle } = options
     return {
+      MODEL: model,
       CLEAN: clean || false,
-      THEME: theme || ['blackCat', 'whiteCat', 'haru1', 'haru2', 'haruto', 'koharu', 'izumi', 'shizuku', 'wanko', 'miku', 'z16'],
+      THEME: theme || model.themeName,
       MESSAGES: messages || {
-        welcome: '',
-        home: '心里的花，我想要带你回家。',
-        theme: '好吧，希望你能喜欢我的其他小伙伴。',
-        close: '你知道我喜欢吃什么吗？痴痴地望着你。'
+        welcome: '欢迎来到hjiog的小小窝',
+        home: '回到主页逛逛吧~',
+        theme: '想看看我的其他小伙伴吗?',
+        close: '呜呜呜,你要赶我走吗?',
+        dress: '我们来玩个换装的游戏吧~'
       },
       MESSAGE_STYLE: messageStyle || {
         right: '68px',

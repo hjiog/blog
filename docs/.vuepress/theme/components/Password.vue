@@ -17,7 +17,7 @@
           @focus="inputFocus"
           @blur="inputBlur">
         <span>{{warningText}}</span>
-        <button ref="passwordBtn" @click="inter">OK</button>
+        <button ref="passwordBtn" @click="inter">开</button>
       </label>
     </ModuleTransition>
 
@@ -58,7 +58,7 @@ export default {
   name: 'Password',
   data () {
     return {
-      warningText: 'Konck! Knock!',
+      warningText: '想窥探我的财富吗？去寻找吧，在那片大海的深处',
       key: ''
     }
   },
@@ -82,11 +82,11 @@ export default {
       sessionStorage.setItem(keyName, keyVal)
       const isKeyTrue = isPage ? isHasPageKey() : isHasKey()
       if (!isKeyTrue) {
-        this.warningText = 'Key Error'
+        this.warningText = '宝箱轻轻地颤动一下，又归于寂静...'
         return
       }
 
-      this.warningText = 'Key Success'
+      this.warningText = '宝箱轻轻颤动，一阵闪光呈现你眼前'
 
       const width = document.getElementById('box').style.width
 
@@ -97,10 +97,10 @@ export default {
       }, 800)
     },
     inputFocus () {
-      this.warningText = 'Input Your Key'
+      this.warningText = '找到那串钥匙了么'
     },
     inputBlur () {
-      this.warningText = 'Konck! Knock!'
+      this.warningText = '想窥探我的财富吗？去寻找吧，在那片大海的深处'
     },
     isHasKey () {
       let { keys } = this.$themeConfig.keyPage
@@ -173,14 +173,14 @@ export default {
       bottom:0;
       left 20px
       opacity 0
-      font-size 50px
+      font-size 25px
       &:focus {
         opacity 1
       }
       &:focus~span{
         transform: translateY(-80px);
         color $accentColor
-        font-size 30px
+        font-size 18px
         opacity:0.8;
       }
       &:focus~button{
@@ -189,7 +189,6 @@ export default {
       }
     }
     span{
-      width:200px;
       height: 100%;
       display: block;
       position: absolute;
@@ -200,7 +199,7 @@ export default {
       cursor: text;
       transition: 0.5s;
       transform-origin: left top;
-      font-size 30px
+      font-size 18px
     }
     button{
       overflow hidden

@@ -66,25 +66,15 @@ module.exports = [
   [
     require("./plugins/vuepress-plugin-kan-ban-niang"),
     {
-      theme: ["koharu", "wanko", "miku"],
-      messages: {
-        welcome: "欢迎来到hjiog的小小窝",
-        home: "心里的花，我想要带你回家。",
-        theme: "好吧，希望你能喜欢我的其他小伙伴。",
-        close: "你知道我喜欢吃什么吗？痴痴地望着你。",
-      },
-      messageStyle: { right: "68px", bottom: "190px" },
-      modelStyle: { right: "90px", bottom: "-20px", opacity: "0.9" },
-      btnStyle: { right: "90px", bottom: "40px" },
-      width: 150,
-      height: 220,
+      messageStyle: { right: "20px", bottom: "150px" },
+      modelStyle: { right: "0", bottom: "-20px", opacity: "0.9" },
+      btnStyle: { right: "165px", bottom: "27px" },
+      width: 160,
+      height: 230,
     },
   ],
   ["go-top"],
   ["@vuepress/nprogress"],
-  [
-    require("./plugins/vuepress-plugin-snow-falling"),
-  ],
 ];
 
 // ["@vuepress-yard/vuepress-plugin-window",{
