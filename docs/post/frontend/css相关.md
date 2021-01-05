@@ -159,16 +159,18 @@ line-height(行高)=font-size(字符大小)+word-spasing(上下行间距)
 
 
 
-## z-index失效
+## css样式问题汇总
 
-### 无效的情况 :
+### z-index失效
+
+#### 无效的情况 :
 
 * 父标签 position属性为relative；
 * 问题标签无position属性（不包括static）；
 * 问题标签含有浮动(float)属性。
 * 父元素无论如何都不能盖住子元素
 
-### 解决办法：
+#### 解决办法：
 
 * position:relative改为position:absolute；
 
@@ -176,11 +178,11 @@ line-height(行高)=font-size(字符大小)+word-spasing(上下行间距)
 
 * 去除浮动。
 
-## margin:0 auto失效
+### margin:0 auto失效
 
 例如直接对图片使用会失效
 
-### 不同场景下生效条件如下：
+#### 不同场景下生效条件如下：
 
 * 块级元素：给定要居中的块级元素的宽度。
 
@@ -200,9 +202,37 @@ line-height(行高)=font-size(字符大小)+word-spasing(上下行间距)
 
 
 
-## 换行失效
+### 换行失效
 
 需使用`white-space: normal`
+
+
+
+### flex 子项目宽度溢出，不等宽
+
+背景：
+
+```html
+<div class="father">
+  <div class="child"></div>
+  <div class="child"></div>
+  <div class="child"></div>
+  <div class="child"></div>
+</div>
+```
+
+```css
+.father{
+  display:flex;
+}
+.child{
+  flex:1;
+}
+```
+
+子项目含有动态长度的内容，这时如果某个子项目的内容过长会导致每个子项目的宽度不等
+
+给子项目添加 `overflow:hiden` 即可解决
 
 
 

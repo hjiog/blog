@@ -96,6 +96,17 @@ import SnowFalling from './snow'
 
 const USER_MODEL_DATA = 'USER_MODEL_DATA'
 
+const getRealUrl = conf => {
+  const host = window.location.host
+  const protocol = window.location.protocol
+  Object.keys(conf).forEach(key => {
+    conf[key] = conf[key].map(path => {
+      return `${protocol}//${host}/${path}`
+    })
+  })
+  return conf
+}
+
 export default {
   name: 'KanBanNiang',
   components: {
@@ -120,7 +131,7 @@ export default {
       themeName: MODEL.themeName, // ['koharu', 'wanko', 'test']
       currentDress: 0,
       // 模型地址
-      model: MODEL.config, //{ koharu: ['/live2d/koharu/koharu.model.json']}
+      model: getRealUrl(MODEL.config), //{ koharu: ['/live2d/koharu/koharu.model.json']}
       // model的高宽
       style: {
         width: WIDTH,
