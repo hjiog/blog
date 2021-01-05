@@ -61,91 +61,91 @@
 </template>
 
 <script>
-import PageInfo from "@theme/components/PageInfo";
-import { resolvePage, outboundRE, endingSlashRE } from "@theme/helpers/utils";
-import ModuleTransition from "@theme/components/ModuleTransition";
-import moduleTransitonMixin from "@theme/mixins/moduleTransiton";
-import SubSidebar from "@theme/components/SubSidebar";
+import PageInfo from '@theme/components/PageInfo'
+import { resolvePage, outboundRE, endingSlashRE } from '@theme/helpers/utils'
+import ModuleTransition from '@theme/components/ModuleTransition'
+import moduleTransitonMixin from '@theme/mixins/moduleTransiton'
+import SubSidebar from '@theme/components/SubSidebar'
 
 export default {
   mixins: [moduleTransitonMixin],
   components: { PageInfo, ModuleTransition, SubSidebar },
 
-  props: ["sidebarItems"],
+  props: ['sidebarItems'],
 
   data() {
     return {
-      isHasKey: true,
-    };
+      isHasKey: true
+    }
   },
 
   computed: {
     // 是否显示评论
     shouldShowComments() {
-      const { isShowComments } = this.$frontmatter;
+      const { isShowComments } = this.$frontmatter
       const { showComment } = this.$themeConfig.valineConfig || {
-        showComment: true,
-      };
+        showComment: true
+      }
       return (
         (showComment !== false && isShowComments !== false) ||
         (showComment === false && isShowComments === true)
-      );
+      )
     },
     showAccessNumber() {
       const {
         $themeConfig: { valineConfig },
-        $themeLocaleConfig: { valineConfig: valineLocalConfig },
-      } = this;
+        $themeLocaleConfig: { valineConfig: valineLocalConfig }
+      } = this
 
-      const vc = valineLocalConfig || valineConfig;
+      const vc = valineLocalConfig || valineConfig
       if (vc && vc.visitor != false) {
-        return true;
+        return true
       }
-      return false;
+      return false
     },
     lastUpdated() {
-      return this.$page.lastUpdated;
+      return this.$page.lastUpdated
     },
     lastUpdatedText() {
-      if (typeof this.$themeLocaleConfig.lastUpdated === "string") {
-        return this.$themeLocaleConfig.lastUpdated;
+      if (typeof this.$themeLocaleConfig.lastUpdated === 'string') {
+        return this.$themeLocaleConfig.lastUpdated
       }
-      if (typeof this.$themeConfig.lastUpdated === "string") {
-        return this.$themeConfig.lastUpdated;
+      if (typeof this.$themeConfig.lastUpdated === 'string') {
+        return this.$themeConfig.lastUpdated
       }
-      return "Last Updated";
+      return 'Last Updated'
     },
     prev() {
-      const prev = this.$frontmatter.prev;
+      const prev = this.$frontmatter.prev
       if (prev === false) {
-        return;
+        return
       } else if (prev) {
-        return resolvePage(this.$site.pages, prev, this.$route.path);
+        return resolvePage(this.$site.pages, prev, this.$route.path)
       } else {
-        return resolvePrev(this.$page, this.sidebarItems);
+        return resolvePrev(this.$page, this.sidebarItems)
       }
     },
     next() {
-      const next = this.$frontmatter.next;
+      const next = this.$frontmatter.next
       if (next === false) {
-        return;
+        return
       } else if (next) {
-        return resolvePage(this.$site.pages, next, this.$route.path);
+        return resolvePage(this.$site.pages, next, this.$route.path)
       } else {
-        return resolveNext(this.$page, this.sidebarItems);
+        return resolveNext(this.$page, this.sidebarItems)
       }
     },
     editLink() {
       if (this.$frontmatter.editLink === false) {
-        return false;
+        return false
       }
       const {
         repo,
         editLinks,
-        docsDir = "",
-        docsBranch = "master",
-        docsRepo = repo,
-      } = this.$themeConfig;
+        docsDir = '',
+        docsBranch = 'master',
+        docsRepo = repo
+      } = this.$themeConfig
 
       if (docsRepo && editLinks && this.$page.relativePath) {
         return this.createEditLink(
@@ -154,76 +154,76 @@ export default {
           docsDir,
           docsBranch,
           this.$page.relativePath
-        );
+        )
       }
-      return "";
+      return ''
     },
     editLinkText() {
       return (
         this.$themeLocaleConfig.editLinkText ||
         this.$themeConfig.editLinkText ||
         `Edit this page`
-      );
+      )
     },
     pageStyle() {
-      return this.$showSubSideBar ? {} : { paddingRight: "0" };
-    },
+      return this.$showSubSideBar ? {} : { paddingRight: '0' }
+    }
   },
 
   methods: {
     createEditLink(repo, docsRepo, docsDir, docsBranch, path) {
-      const bitbucket = /bitbucket.org/;
+      const bitbucket = /bitbucket.org/
       if (bitbucket.test(repo)) {
-        const base = outboundRE.test(docsRepo) ? docsRepo : repo;
+        const base = outboundRE.test(docsRepo) ? docsRepo : repo
         return (
-          base.replace(endingSlashRE, "") +
+          base.replace(endingSlashRE, '') +
           `/src` +
           `/${docsBranch}/` +
-          (docsDir ? docsDir.replace(endingSlashRE, "") + "/" : "") +
+          (docsDir ? docsDir.replace(endingSlashRE, '') + '/' : '') +
           path +
           `?mode=edit&spa=0&at=${docsBranch}&fileviewer=file-view-default`
-        );
+        )
       }
 
       const base = outboundRE.test(docsRepo)
         ? docsRepo
-        : `https://github.com/${docsRepo}`;
+        : `https://github.com/${docsRepo}`
       return (
-        base.replace(endingSlashRE, "") +
+        base.replace(endingSlashRE, '') +
         `/edit` +
         `/${docsBranch}/` +
-        (docsDir ? docsDir.replace(endingSlashRE, "") + "/" : "") +
+        (docsDir ? docsDir.replace(endingSlashRE, '') + '/' : '') +
         path
-      );
-    },
-  },
-};
+      )
+    }
+  }
+}
 
 function resolvePrev(page, items) {
-  return find(page, items, -1);
+  return find(page, items, -1)
 }
 
 function resolveNext(page, items) {
-  return find(page, items, 1);
+  return find(page, items, 1)
 }
 
 function find(page, items, offset) {
-  const res = [];
-  flatten(items, res);
+  const res = []
+  flatten(items, res)
   for (let i = 0; i < res.length; i++) {
-    const cur = res[i];
-    if (cur.type === "page" && cur.path === decodeURIComponent(page.path)) {
-      return res[i + offset];
+    const cur = res[i]
+    if (cur.type === 'page' && cur.path === decodeURIComponent(page.path)) {
+      return res[i + offset]
     }
   }
 }
 
 function flatten(items, res) {
   for (let i = 0, l = items.length; i < l; i++) {
-    if (items[i].type === "group") {
-      flatten(items[i].children || [], res);
+    if (items[i].type === 'group') {
+      flatten(items[i].children || [], res)
     } else {
-      res.push(items[i]);
+      res.push(items[i])
     }
   }
 }
@@ -312,7 +312,21 @@ function flatten(items, res) {
     float: right;
   }
 }
-
+@media (max-width: 1550px) {
+  .page{
+    .side-bar{
+        position: fixed;
+        top: 10rem;
+        bottom: 10rem;
+        left: 1rem;
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+    }
+  }
+}
 @media (max-width: $MQMobile) {
   .page {
     padding-right: 0;
