@@ -97,7 +97,7 @@ import SnowFalling from './snow'
 const USER_MODEL_DATA = 'USER_MODEL_DATA'
 
 const getRealUrl = conf => {
-  if (window) {
+  if (typeof window !== 'undefined') {
     const host = window.location.host
     const protocol = window.location.protocol
     Object.keys(conf).forEach(key => {
