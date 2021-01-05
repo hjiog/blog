@@ -97,13 +97,15 @@ import SnowFalling from './snow'
 const USER_MODEL_DATA = 'USER_MODEL_DATA'
 
 const getRealUrl = conf => {
-  const host = window.location.host
-  const protocol = window.location.protocol
-  Object.keys(conf).forEach(key => {
-    conf[key] = conf[key].map(path => {
-      return `${protocol}//${host}/${path}`
+  if (window) {
+    const host = window.location.host
+    const protocol = window.location.protocol
+    Object.keys(conf).forEach(key => {
+      conf[key] = conf[key].map(path => {
+        return `${protocol}//${host}/${path}`
+      })
     })
-  })
+  }
   return conf
 }
 
