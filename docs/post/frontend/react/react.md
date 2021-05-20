@@ -163,3 +163,70 @@ function ThemedButton() {
 
 
 
+## 使用useReduce
+
+函数原型
+
+```js
+// 其中initialArg是传入就决定的,init的类型是函数,作用是动态生成初始参数
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+
+例子
+
+```jsx
+function init(initialCount) {  return {count: initialCount};}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    case 'reset':      return init(action.payload);    default:
+      throw new Error();
+  }
+}
+
+function Counter({initialCount}) {
+  const [state, dispatch] = useReducer(reducer, initialCount, init);  
+    return (
+    <>
+      Count: {state.count}
+      <button
+        onClick={() => dispatch({type: 'reset', payload: initialCount})}>        
+    	Reset
+      </button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+    </>
+  );
+}
+```
+
+**什么情况下才需要使用useReduce而不是useState?**
+
+1. useEffect只想执行一次,而又依赖了外部变量时
+
+```jsx
+// 当step更新时,useEffect会重新计时,而我们只想useEffect只执行一次
+// 若useEffect使用了空依赖[],那么,在useEffect里的step的值将不会被setStep更新,永远都会是初始值
+useEffect(() => {
+  const id = setInterval(() => {
+    setCount(c => c + step);
+  }, 1000);
+  return () => clearInterval(id);
+}, [step]);
+
+// 使用useReduce可解决以上问题
+const [state, dispatch] = useReducer(reducer, initialState);
+const { count, step } = state;
+
+useEffect(() => {
+  const id = setInterval(() => {
+    dispatch({ type: "tick" }); // Instead of setCount(c => c + step);
+  }, 1000);
+  return () => clearInterval(id);
+}, [dispatch]);
+```
+

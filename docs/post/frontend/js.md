@@ -271,11 +271,20 @@ nums.forEach(v=>console.log(v)) // 输出10个`0`
 返回一个boolean，判断是否有元素是否符合func条件(有一个就行)（并没有改变原数组
 		return true/false 终止
 
-#### find()
-
-返回符合条件的value
-
 **some中同样不能用break和continue中断,用return或return false能达到类似continue的效果,用return true 能退出整个循环**
+
+#### find() 
+
+（fn:(v:any)=>boolen):any
+
+返回符合条件的value,没有返回则结果是undefined
+
+```js
+const array1 = [5, 12, 8, 130, 44];
+const found = array1.find(element => element > 10);
+console.log(found);
+// expected output: 12
+```
 
 #### every()
 返回一个boolean，判断每个元素是否符合func条件（所有都判断）（并没有改变原数组）
@@ -421,6 +430,17 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min) ) + min;
 }
 ```
+
+#### base64编码与解码
+
+```js
+// 编码
+window.btoa("hello")// "aGVsbG8="
+// 解码
+window.atob("aGVsbG8=")// "hello"
+```
+
+
 
 
 
@@ -1384,188 +1404,233 @@ console.log(myInstanceof(a, Array)) // true
 
 #### 原理
 
-完整版需要用到的辅助函数
+promise.js
 
 ```js
-const resolvePromise = (promise2, x, resolve, reject) => {
-  // x和promise2不能是同一个人，如果是同一个人就报错
-  // 加一个开关，防止多次调用失败和成功，跟pending状态值一样的逻辑一样,走了失败就不能走成功了，走了成功一定不能在走失败
-  if (promise2 === x) {
-    return reject(
-      new TypeError('Chaining cycle detected for promise #<promise>')
-    )
-  }
-  // 判断如果x是否是一个对象，判断函数是否是对象的方法有：typeof instanceof constructor toString
-  if ((typeof x === 'object' && x != null) || typeof x === 'function') {
-    let called
-    try { // 预防取.then的时候错误
-      let then = x.then // Object.definePropertype
-      if (typeof then === 'function') {
-        // 用then.call()为了避免在使用一次x.then报错
-        then.call(x, y => {
-          // resolve(y)// 采用promise的成功结果，并且向下传递
-          if (called) {
-            return
-          }
-          called = true
-          // y有可能是一个promise，那么我们就要继续使用回调函数,直到解析出来的值是一个普通值
-          resolvePromise(promise2, y, resolve, reject)
-        }, r => {
-          if (called) {
-            return
-          }
-          called = true
-          reject(r)// 采用promise的失败结果，并且向下传递
-        })
-      } else {
-        if (called) {
-          return
-        }
-        called = true
-        resolve(x)// x不是一个函数，是一个对象
-      }
-    } catch (err) {
-      if (called) {
-        return
-      }
-      called = true
-      reject(err)
-    }
-  } else {
-    // x是一个普通值
-    resolve(x)
-  }
-}
-```
+// 先定义三个常量表示状态
+const PENDING = 'pending';
+const FULFILLED = 'fulfilled';
+const REJECTED = 'rejected';
 
-主函数
-
-```js
-// 定义Promise的三种状态常量
-const PENDING = 'PENDING'
-const FULFILLED = 'FULFILLED'
-const REJECTED = 'REJECTED'
-
-// 判断变量否为function
-const isFunction = variable => typeof variable === 'function'
-
+// 新建 MyPromise 类
 class MyPromise {
-  constructor(handle) {
-    if (!isFunction(handle)) {
-      throw new Error('MyPromise must accept a function as a parameter')
-    }
-    this.status = PENDING
-    this.value = undefined
-    this.reason = undefined
-    this.resolveCallBack = []
-    this.rejectCallBack = []
 
-    let resolve = (value) => {
-      // 这样做可以实现resolve和reject只能执行一个
-      if (this.status !== PENDING) return
-      this.status = FULFILLED
-      this.value = value
-      this.resolveCallBack.forEach(fn => fn())
-    }
-
-    let reject = (reason) => {
-      if (this.status !== PENDING) return
-      this.status = REJECTED
-      this.reason = reason
-      this.rejectCallBack.forEach(fn => fn())
-    }
-
+  constructor(executor) {
     try {
-      handle(resolve, reject)
-    } catch (e) {
-      reject(e)
+      executor(this.resolve, this.reject)
+    } catch (err) {
+      this.reject(err)
     }
-
   }
 
-  then (onResolve, onReject) {
-    // onResolve, onReject 都是可选参数
-    onResolve = isFunction(onResolve) ? onResolve : data => data
-    onReject = isFunction(onReject) ? onReject : err => {
-      throw err
-    }
-    // 实现then后面可以再次调用
-    let promise2 = new MyPromise((resolve, reject) => {
-      // 同步任务
-      if (this.status == FULFILLED) {
-        setTimeout(() => {
-          try {
-            // 执行回调函数
-            let res = onResolve(this.value)
-            // 将回调函数结果保存以备作为下次then的入参
-            // ??? 这里执行resolve,如何保证this指向,但执行起来好像没错
-            // ==> resolve是每new一个对象就会重新赋值,因此this永远指向新的对象
-            // 如果resolve是对象里的一个属性的话,那么这里可能会调用this.resolve(res),this就会指向旧的对象
-            // 因此handle函数在传参之前,可以执行this.resolve.bind(this)
-            resolve(res)
-            // todo
-            // res可能是一个函数或promise对象,需要实现一个函数将其转换成基本值
-            // 可将resolve(res)替换成 resolvePromise(promise2, res, resolve, reject) 即可
-          } catch (e) {
-            reject(e)
-          }
-        })
-        // 异步任务,即new Pormise 中的resolve函数放在了宏任务里面
-      } else if (this.status == REJECTED) {
-        setTimeout(() => {
-          try {
-            let res = onReject(this.reason)
-            reject(res)
-          } catch (e) {
-            reject(e)
-          }
-        })
-      } else if (this.status == PENDING) { //异步任务
-        // 将resolve回调函数加入任务队列
-        this.resolveCallBack.push(() => {
-          try {
-            // 实现then回调里return一个值能被下一个then接收
-            let res = onResolve(this.value)
-            resolve(res)
-          } catch (e) {
-            onReject(e)
-          }
-        })
+  status = PENDING
+  // 保存resolve的值
+  value = null
+  // 保存reject的值
+  reason = null
 
-        // 将reject回调函数加入任务队列
-        this.rejectCallBack.push(() => {
+  // resolve的回调队列
+  resolveCallBackList = []
+  rejectCallBackList = []
+
+  static resolve (v) {
+    return new MyPromise((resolve) => {
+      resolve(v)
+    })
+  }
+
+  static reject (reason) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason)
+    })
+  }
+
+  resolve = (v) => {
+    if (this.status === PENDING) {
+      this.value = v
+      this.status = FULFILLED
+      // 执行完回调函数记得清除
+      while (this.resolveCallBackList.length) {
+        this.resolveCallBackList.shift()(v)
+      }
+    }
+  }
+
+  reject = (v) => {
+    if (this.status === PENDING) {
+      this.reason = v
+      this.status = REJECTED
+      // 执行完回调函数记得清除
+      while (this.rejectCallBackList.length) {
+        this.rejectCallBackList.shift()(v)
+      }
+    }
+  }
+
+  then (onFulfilled, onReject) {
+    // 保证参数不为空
+    const realOnFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v
+    const realOnReject = typeof onReject === 'function' ? onReject : reason => { throw reason }
+
+    const promise = new MyPromise((resolve, reject) => {
+
+      // 此处创建微任务，用queueMicrotast代替setTimeout，
+      const fulfilledPromise = () => {
+        queueMicrotask(() => {
           try {
-            // 实现then回调里return一个值能被下一个then接收
-            let res = onResolve(this.reason)
-            resolve(res)
-          } catch (e) {
-            onReject(e)
+            const res = realOnFulfilled(this.value)
+            resolvePromise(promise, res, resolve, reject)
+          } catch (err) {
+            reject(err)
           }
         })
+      }
+
+      const rejectPromise = () => {
+        queueMicrotask(() => {
+          try {
+            // todo 此处为何需要返回
+            const res = realOnReject(this.reason)
+            resolvePromise(promise, res, resolve, reject)
+          } catch (err) {
+            reject(err)
+          }
+        })
+      }
+
+      if (this.status === FULFILLED) {
+        fulfilledPromise()
+      } else if (this.status === REJECTED) {
+        rejectPromise()
+      } else if (this.status === PENDING) {
+        this.resolveCallBackList.push(fulfilledPromise)
+        this.rejectCallBackList.push(rejectPromise)
       }
     })
+    return promise
+  }
 
-    return promise2
+  catch (onReject) {
+    return this.then(undefined, onReject)
+  }
+
+  finally (callBack) {
+    return this.then(
+      (resolve) => MyPromise.resolve(callBack()).then(() => resolve),
+      (reason) => MyPromise.resolve(callBack()).then(() => { throw reason }),
+    )
   }
 }
 
-let a = new MyPromise(r => {
-  r(1)
-  // then后面返回的是一个新的MyPromise对象,与a无关
-  // 此时then被放在一个宏任务中
-  // status为 fullfilled
-  // 后续的then并不会阻塞,而是在resolve队列中注册一个异步回调
-}).then((res) => {
-  console.log(res)
-  return 2 // 这个返回值会被reslove函数包装
-}).then((res) => { // status为 pendding ,因为这是一个新的对象
-  console.log(res)
-  return 3
-}).then((res) => {// status为 pendding ,因为这是一个新的对象
-  console.log(res)
-  return 4
-})
+
+function resolvePromise (promise, x, resolve, reject) {
+  // 如果相等了，说明return的是自己，抛出类型错误并返回
+  if (promise === x) {
+    return reject(new TypeError('The promise and the return value are the same'));
+  }
+
+  // 无论是object（相当于MyPromise对象）或是function,只要含有then这个方法，都会去调用 
+  if (typeof x === 'object' || typeof x === 'function') {
+    // x 为 null 直接返回，走后面的逻辑会报错
+    if (x === null) {
+      return resolve(x);
+    }
+
+    let then;
+    try {
+      // 把 x.then 赋值给 then 
+      then = x.then;
+    } catch (error) {
+      // 如果取 x.then 的值时抛出错误 error ，则拒绝 promise
+      // 这是有可能的，比如用object.defineProperties定义then的get属性，当访问then时就抛出错误
+      return reject(error);
+    }
+
+    // 如果 then 是函数
+    if (typeof then === 'function') {
+      let called = false;
+      try {
+        then.call(
+          x, // this 指向 x
+          // 如果 resolvePromise 以值 y 为参数被调用，则运行 [[Resolve]](promise, y)
+          y => {
+            // 如果 resolvePromise 和 rejectPromise 均被调用，
+            // 或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
+            // 实现这条需要前面加一个变量 called
+            if (called) return;
+            called = true;
+            resolvePromise(promise, y, resolve, reject);
+          },
+          // 如果 rejectPromise 以据因 r 为参数被调用，则以据因 r 拒绝 promise
+          r => {
+            if (called) return;
+            called = true;
+            reject(r);
+          });
+      } catch (error) {
+        // 如果调用 then 方法抛出了异常 error：
+        // 如果 resolvePromise 或 rejectPromise 已经被调用，直接返回
+        if (called) return;
+        // 否则以 error 为据因拒绝 promise
+        reject(error);
+      }
+    } else {
+      // 如果 then 不是函数，以 x 为参数执行 promise
+      resolve(x);
+    }
+  } else {
+    // 如果 x 不为对象或者函数，以 x 为参数执行 promise
+    resolve(x);
+  }
+}
 ```
+
+**测试是否符合promise A+ 规范**
+
+1. 在promise.js下添加一下代码
+
+```js
+MyPromise.deferred = function () {
+  var result = {};
+  result.promise = new MyPromise(function (resolve, reject) {
+    result.resolve = resolve;
+    result.reject = reject;
+  });
+
+  return result;
+}
+module.exports = MyPromise;
+```
+
+2. 添加测试库promises-aplus-tests
+
+```bash
+yarn add promises-aplus-tests
+```
+
+3. 在package.json添加启动脚本
+
+```js
+{
+  "name": "promise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "promises-aplus-tests promise.js", // 此处添加
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+```
+
+
 
 #### 实例方法
 
@@ -2113,6 +2178,88 @@ let d = foo()
 console.log(d)
 ```
 
+### 22. 手写async await
+
+思路:  
+
+async await 本质上是promise和generate的语法糖,递归调用generate.next即可实现
+
+```js
+
+// 异步promise函数
+function promiseFn (msg) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(msg)
+      resolve(msg)
+    }, 1000)
+  })
+}
+
+// 使用generator语法模拟async await 
+function* generatorFn () {
+  const data1 = yield promiseFn('msg111');
+  console.log(data1, '======');
+  const data2 = yield promiseFn('msg222');
+  console.log(data2, '======');
+  const data3 = yield promiseFn('msg333');
+  console.log(data3, '======');
+}
+
+// 让generator能自动执行下一步
+function asyncFn (generatorFn) {
+  return function () {
+    const gen = generatorFn();
+    return new Promise((resolve, reject) => {
+      // 递归函数
+      function step (key, arg) {
+        let res;
+        try {
+          // 这步是关键，执行next方法才会执行yield
+          // 这个res 是立即返回还是延迟返回？ ==>立即返回，但res.value是一个promise，状态是pending
+          // 第一次执行到这,arg为undefined,执行field右边代码,
+          // 第二次执行到这,arg有值了(上一次的value),把这个arg的值赋值给第一个field左边的变量,然后执行第二个field右边代码
+          res = gen[key](arg);
+          console.log('res:', res)
+        } catch (err) {
+          return reject(err)
+        }
+        // value是什么？ ==>这里返回的是一个promise,实际上就是promiseFn('msg111')的返回值
+        const { value, done } = res;
+        if (done) {
+          return resolve(value)
+        } else {
+          // 如何做到串行? ==> value是一个promise,这里会等value的resolve执行后才会执行下一个step
+          return Promise.resolve(value).then((val) => step('next', val), (err) => step('throw', err))
+        }
+      }
+      step('next')
+    })
+  }
+}
+
+const run = asyncFn(generatorFn);
+run();
+
+// 输出
+/**
+res: { value: Promise { <pending> }, done: false }
+=====================1s后输出======================
+msg111
+msg111 ======
+res: { value: Promise { <pending> }, done: false }
+=====================1s后输出======================
+msg222
+msg222 ======
+res: { value: Promise { <pending> }, done: false }
+=====================1s后输出======================
+msg333
+msg333 ======
+res: { value: undefined, done: true }
+*/
+
+```
+
 
 
 ## promise
@@ -2205,6 +2352,14 @@ test(?!/d) : test后面不是数字
 `/([a-zA-Z])\1/g.test('rattler')`此例检查是否含有连续重复的字母
 
 注意`/[a-zA-Z]{2，}/g.test('rattler')`并不能检测是否含有重复字母，只能说明含有两个以上连续字母
+
+- 在括号内使用?:表示不捕获，如
+
+  ```js
+  # whistle规则
+  /.*(?:com|net)\/(.*)/ http://localhost:8265/$1 excludeFilter:///api
+  // $1表示第二个括号的值，如果去掉?:，则表示第一个括号的值
+  ```
 
 ### 常用正则
 

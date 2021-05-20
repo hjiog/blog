@@ -13,8 +13,7 @@ categories:
 
 流程图如下：
 
-![流程图](/myVue.png)
-
+![流程图](../../.vuepress/public/myVue.png)
 
 
 实现代码：
@@ -159,4 +158,73 @@ categories:
 
 
 
+## vue3.0问题汇总
 
+- 使用二进制定义枚举类型的好处？
+
+方便联合类型的赋值和判断，比如
+
+```ts
+const enum Flags {
+    TEACHER = 1, // 老师
+    STUDENT = 1 << 1, // 学生
+    BOY = 1 << 2, // 男生
+    GIRL = 1 << 3, // 女生
+}
+// Tom 是一名男老师
+const Tom = Flags.TEACHER | Flags.BOY
+
+if(Tom & Flags.TEACHER){
+    console.log("Tom 是一名老师")
+}
+
+if(Tom & Flags.BOY){
+    console.log("Tom 是男的")
+}
+
+```
+
+- ref与reactive的关系？
+
+使用ref创建的对象含有__v_isRef属性，当这个属性为true时，vue会挂上一层代理，使得模板可以直接使用\{\{ref}\}，而不用展开写；另外，使用ref若传入的参数为对象时，才会调用reactive方法返回代理后的实例。
+
+- ref/reactive如何实现递归代理嵌套的key?
+
+关键在于这里
+
+```ts
+const test = {a:1}
+const proxy = new Proxy(test,{
+    get(target, key, receiver){
+        const res = Reflect.get(target, key, receiver)
+        if(typeof res === 'object'){
+            // 这里递归调用了
+            return reactive(res)
+        }
+        return res
+	}
+})
+
+```
+
+- toRef的本质？
+
+```ts
+// 关键代码
+// 举个例子：如调用key = toRef(object,"key")
+// 当我们访问key.value就相当于直接调用object.key
+// 所以如果这个object是用reactive创建的，那么这个key是具有响应式的，否则并不具备响应式
+class ObjectRefImpl<T extends object, K extends keyof T> {
+  public readonly __v_isRef = true
+
+  constructor(private readonly _object: T, private readonly _key: K) {}
+
+  get value() {
+    return this._object[this._key]
+  }
+
+  set value(newVal) {
+    this._object[this._key] = newVal
+  }
+}
+```

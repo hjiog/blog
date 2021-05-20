@@ -659,6 +659,50 @@ order用于调整顺序，flex:1用于填充剩余的部分
 
 注：如若想实现根据屏幕空间大小来按需使用不同方向的提示框，可用js监听getBoundingClientRect相关参数实现
 
+#### 优化
+
+目前的问题是：
+
+1. 使用opacity隐藏，当鼠标移动提示框附近时，提示框会显示出来，不合理，应该移动到“鼠标移动到我这”，才显示
+2. 使用display隐藏，解决了上面的问题，但鼠标就无法移动到提示框上了
+
+解决方法：
+
+```less
+.father {
+  position: relative;
+  &:hover {
+    .hover-card {
+      // 显示提示框
+      display: block; 
+    }
+  }
+}
+.hover-card {
+  &:hover {
+    // 显示提示框
+    display: block;
+  }
+  display: none;
+  
+  // 在目标元素和hover-card之间放置一层蒙版，使得鼠标可以顺滑得移动到提示框而不会有闪烁
+  &::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      top: -16px;
+      right: 20px;
+      width: 80px;
+      height: 24px;
+      background-color: transparent;
+  }
+}
+```
+
+
+
+
+
 ### 文字超出部分用省略号代替
 
 - 单行文本
@@ -687,6 +731,8 @@ order用于调整顺序，flex:1用于填充剩余的部分
 </p>
 
 - 多行文本
+
+方法一 麻烦，兼容好
 
 ```css
 <div class="wrap">
@@ -761,6 +807,19 @@ order用于调整顺序，flex:1用于填充剩余的部分
   background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);">...</span>
 </div>
 </div>
+
+方法2
+
+```css
+overflow: hidden;  // 超出的文本隐藏
+text-overflow: ellipsis; // 溢出用省略号显示
+display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
+-webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
+-webkit-box-orient: vertical;  // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+```
+
+
+
 ### footer自适应
 
 footer元素，希望页面不够一屏的时候，显示在浏览器的底部，页面超过一屏的时候，显示在页面的底部

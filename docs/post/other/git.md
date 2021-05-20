@@ -182,3 +182,30 @@ git checkout --patch A a
 
 - .gitignore 失效
 git rm -r --cached xxx
+
+
+
+## 利用git工具规范git提交信息
+
+### 安装commitizen
+
+```shell
+npm i commitizen -g
+```
+
+配置
+
+```json
+/* package.json */
+{
+    "config": {
+        "commitizen": {
+            "path": "cz-conventional-changelog"
+        }
+    }
+}
+```
+
+### 使用 commitizen
+
+- 在 `git add` 后，用 `git cz` 进行 commit。
