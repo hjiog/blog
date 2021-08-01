@@ -7,7 +7,7 @@ categories:
  - 其他
 ---
 
-##
+## 通用
 
 Command +shift +4  截屏保存到桌面
 
@@ -62,6 +62,7 @@ command
        d     item中打开新的tap
        [     item中分屏左移
        ]     item中分屏右移
+       k     清空item的内容,等同于printf '\33c\e[3J',clear只是打印空格上滑而已
 ```
 
 ```
@@ -83,3 +84,10 @@ command
      空格  =   打开 iterm2
 ```
 
+
+
+## vscode相关
+
+Ctrl + -  后退
+
+command+shift+k 删除一行

@@ -23,7 +23,7 @@ module.exports = {
       items: [
         { text: "制作属于你的一首曲子吧", link: "/pages/DrumKit.md" },
         { text: "图片处理", link: "/pages/PictureTool.md" },
-        { text: "中国象棋", link: "https://hjiog.gitee.io/vue-chess/" },
+        { text: "中国象棋", link: "https://hjiog.github.io/chess" },
       ],
     },
   ],

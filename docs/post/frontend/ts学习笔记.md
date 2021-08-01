@@ -306,3 +306,204 @@ const key: keyUnion<obj> // const key: "a" | "b" | "c"
 const value: valueUnion<obj> // const value: string | number | boolean
 ```
 
+
+
+## 声明文件
+
+npm 包的声明文件主要有以下几种语法：
+
+- [`export`](https://ts.xcatliu.com/basics/declaration-files.html#export) 导出变量
+- [`export namespace`](https://ts.xcatliu.com/basics/declaration-files.html#export-namespace) 导出（含有子属性的）对象
+- [`export default`](https://ts.xcatliu.com/basics/declaration-files.html#export-default) ES6 默认导出
+- [`export =`](https://ts.xcatliu.com/basics/declaration-files.html#export-1) commonjs 导出模块
+
+declare,global,namespace,module 和三斜线指令的区别与联系？
+
+- declare：声明一个变量，类，函数是全局变量，type和interface默认是全局了，不需要加declare了，如：
+
+```js
+// index.d.ts
+declare let jQuery: (selector: string) => any;
+declare const jQuery: (selector: string) => any;
+declare function jQuery(selector: string): any;
+declare namespace jQuery {
+    function ajax(url: string, settings?: any): void;
+}
+// interface 前不需要加declare
+interface AjaxSettings {
+    method?: 'GET' | 'POST'
+    data?: any;
+}
+
+// 注意：declare对于项目内部来说是全局变量，但如果作为一个对外发布的包来说，需要导出类型
+// 但是使用了export或import,index.d.ts就不会被当成一个声明文件，内部使用也需要import 进来
+// export {jQuery，AjaxSettings}
+```
+
+- global：如果要拓展已存在的全局变量，可以使用该字段，如：
+
+```js
+// types/foo/index.d.ts
+declare global {
+    interface String {
+        prependHello(): string;
+    }
+}
+
+// 注意即使此声明文件不需要导出任何东西，仍然需要导出一个空对象，用来告诉编译器这是一个模块的声明文件，而不是一个全局变量的声明文件。
+export {};
+```
+```js
+// src/index.ts
+'bar'.prependHello();
+```
+
+- namespace 命名空间，为避免全局变量重名，我们可以声明一个命名空间。namespace是一个集合，一个module可以有多个命令空间，如：
+
+```js
+// src/jQuery.d.ts
+
+declare namespace jQuery {
+    function ajax(url: string, settings?: any): void;
+}
+```
+
+```js
+// src/index.ts
+
+jQuery.ajax('/api/get_something');
+```
+
+- module: 如果是需要扩展原有模块的话，需要在类型声明文件中先引用原有模块，再使用 `declare module` 扩展原有模块 
+
+```js
+// types/moment-plugin/index.d.ts
+
+import * as moment from 'moment';
+
+declare module 'moment' {
+    export function foo(): moment.CalendarKey;
+}
+```
+
+```js
+// src/index.ts
+
+import * as moment from 'moment';
+import 'moment-plugin';
+
+moment.foo();
+```
+
+- 三斜线指令
+
+ 在全局变量的声明文件中，是不允许出现 `import`, `export` 关键字的。一旦出现了，那么他就会被视为一个 npm 包或 UMD 库，就不再是全局变量的声明文件了 ,所以类似于声明文件中的 `import`，它可以用来导入另一个声明文件。在以下几个场景下，我们才需要使用三斜线指令替代 `import`：
+
+- 当我们在**书写**一个全局变量的声明文件时
+- 当我们需要**依赖**一个全局变量的声明文件时
+
+```js
+// types/jquery-plugin/index.d.ts
+
+/// <reference types="jquery" />
+
+declare function foo(options: JQuery.AjaxSettings): string;
+```
+
+```js
+// src/index.ts
+
+foo({});
+```
+
+
+
+## tsconfig.json文件字段详解
+
+```json
+{
+  "compileOnSave": false, // 设置保存文件的时候自动编译，但需要编译器支持
+  "compilerOptions": {
+    "incremental": true, // TS编译器在第一次编译之后会生成一个存储编译信息的文件，第二次编译会在第一次的基础上进行增量编译，可以提高编译的速度
+    "tsBuildInfoFile": "./buildFile", // 增量编译文件的存储位置
+    "diagnostics": true, // 打印诊断信息 
+    "target": "ES5", // 目标语言的版本
+    "module": "CommonJS", // 生成代码的模板标准
+    "outFile": "./app.js", // 将多个相互依赖的文件生成一个文件，可以用在AMD模块中，即开启时应设置"module": "AMD",
+    "lib": ["DOM", "ES2015", "ScriptHost", "ES2019.Array"], // TS需要引用的库，即声明文件，es5 默认引用dom、es5、scripthost,如需要使用es的高级版本特性，通常都需要配置，如es8的数组新特性需要引入"ES2019.Array",
+    "allowJS": true, // 允许编译器编译JS，JSX文件
+    "checkJs": true, // 允许在JS文件中报错，通常与allowJS一起使用
+    "outDir": "./dist", // 指定输出目录
+    "rootDir": "./", // 指定输出文件目录(用于输出)，用于控制输出目录结构
+    "declaration": true, // 生成声明文件，开启后会自动生成声明文件
+    "declarationDir": "./file", // 指定生成声明文件存放目录
+    "emitDeclarationOnly": true, // 只生成声明文件，而不会生成js文件
+    "sourceMap": true, // 生成目标文件的sourceMap文件
+    "inlineSourceMap": true, // 生成目标文件的inline SourceMap，inline SourceMap会包含在生成的js文件中
+    "declarationMap": true, // 为声明文件生成sourceMap
+    "typeRoots": ["./node_modules/@types/", "./typings"], // 声明文件目录，默认时node_modules/@types，typings为自定义的目录
+    "types": [], // 加载的声明文件包，若不指定types，则typeRoots下的所有声明的包都会引进，若指定types,则只会引入指定的包
+    "removeComments":true, // 删除注释 
+    "noEmit": true, // 不输出文件,即编译后不会生成任何js文件
+    "noEmitOnError": true, // 发送错误时不输出任何文件
+    "noEmitHelpers": true, // 不生成helper函数，减小体积，需要额外安装，常配合importHelpers一起使用
+    "importHelpers": true, // 通过tslib引入helper函数，文件必须是模块
+    "downlevelIteration": true, // 降级遍历器实现，如果目标源是es3/5，那么遍历器会有降级的实现
+    "strict": true, // 开启所有严格的类型检查
+    "alwaysStrict": true, // 在代码中注入'use strict'
+    "noImplicitAny": true, // 不允许隐式的any类型
+    "strictNullChecks": true, // 不允许把null、undefined赋值给其他类型的变量
+    "strictFunctionTypes": true, // 不允许函数参数双向协变
+    "strictPropertyInitialization": true, // 类的实例属性必须初始化
+    "strictBindCallApply": true, // 严格的bind/call/apply检查
+    "noImplicitThis": true, // 不允许this有隐式的any类型
+    "noUnusedLocals": true, // 检查只声明、未使用的局部变量(只提示不报错)
+    "noUnusedParameters": true, // 检查未使用的函数参数(只提示不报错)
+    "noFallthroughCasesInSwitch": true, // 防止switch语句贯穿(即如果没有break语句后面不会执行)
+    "noImplicitReturns": true, //每个分支都会有返回值
+    "esModuleInterop": true, // 允许export=导出，由import from 导入
+    "allowUmdGlobalAccess": true, // 允许在模块中全局变量的方式访问umd模块
+    "moduleResolution": "node", // 模块解析策略，ts默认用node的解析策略，即相对的方式导入
+    "baseUrl": "./", // 解析非相对模块的基地址，默认是当前目录
+    "paths": { // 路径映射，相对于baseUrl
+      // 如使用jq时不想使用默认版本，而需要手动指定版本，可进行如下配置
+      "jquery": ["node_modules/jquery/dist/jquery.min.js"]
+    },
+    "rootDirs": ["src","out"], // 将多个目录放在一个虚拟目录下，用于运行时，即编译后引入文件的位置可能发生变化，这也设置可以虚拟src和out在同一个目录下，不用再去改变路径也不会报错
+    "listEmittedFiles": true, // 打印输出文件
+    "listFiles": true// 打印编译的文件(包括引用的声明文件)
+  },
+  "exclude": ["dist", "node_modules","docs"],
+  "extends": "./tsconfig.base.json",
+  "files": [
+    // 指定编译文件是src目录下的leo.ts文件
+    // 默认包含当前目录和子目录下所有 TypeScript 文件
+    "scr/leo.ts"
+  ],
+  "include": [
+    // "scr" // 会编译src目录下的所有文件，包括子目录
+    // "scr/*" // 只会编译scr一级目录下的文件
+    "scr/*/*" // 只会编译scr二级目录下的文件
+  ],
+    // 在项目开发中，有时候我们为了方便将前端项目和后端node项目放在同一个目录下开发，两个项目依赖同一个配置文件和通用文件，但我们希望前后端项目进行灵活的分别打包，那么我们可以进行如下配置 
+  "references": [ // 指定依赖的工程
+     {"path": "./common"}
+  ]
+}
+
+```
+
+
+
+## 注释
+
+```js
+export interface TooltipProps {
+  // 以下用法表示transitionName被弃用
+  /** @deprecated Use `motion` instead */
+  transitionName?: string;
+  /** Config popup motion */
+  motion?: TriggerProps['popupMotion'];
+}
+```
+

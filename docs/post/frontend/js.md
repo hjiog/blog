@@ -157,7 +157,7 @@ console.log(str); // -> 4,546,556,565,656
 
 #### split()
 
-分割再赋值给数组，如果把空字符串 ("") 用作 separator，那么 stringObject 中的每个字符之间都会被分割。
+分割再赋值给数组，如果把空字符串 ("") 用作 separator，那么 stringObject 中的每个字符之间都会被分割。自身不变化
 #### slice()
 
 切片,自身无改变，要返回
@@ -184,8 +184,17 @@ console.log(str); // -> 4,546,556,565,656
 
 连接两个数组
 
+```js
+const array1 = ['a', 'b', 'c'];
+const array2 = ['d', 'e', 'f'];
+const array3 = array1.concat(array2);
+
+console.log(array3);
+// expected output: Array ["a", "b", "c", "d", "e", "f"]
+```
+
 #### splice(index,len,[item])
-该方法会改变原始数组，并数组的形式返回删除的元素。splice有3个参数，它也可以用来替换/删除/添加数组内某一个或者几个值
+**该方法会改变原始数组，并数组的形式返回删除的元素**。splice有3个参数，它也可以用来替换/删除/添加数组内某一个或者几个值
 index:数组开始下标 len: 替换/删除的长度,增加元素时可以为0 item:替换的值，删除操作的话 item为空
 举例:
 
@@ -203,12 +212,12 @@ fruits1.splice(2, 1);
 console.log(fruits1)//[ 'Banana', 'Orange', 'Mango' ]
 ```
 
-
 #### indexOf()
+
 找出子字符串的index位置序号(子窜每个字符都要匹配)
 
 #### filter()
-括号内写入boolen类型的回调函数，筛选出true的元素
+括号内写入boolen类型的回调函数，筛选出true的元素，不会改变自身的值。
 
 `filter(function(currentValue,index,arr), thisValue)`，`thisValue`是给回调函数指定this对象，默认是undefined
 如：
@@ -3029,18 +3038,4 @@ Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
 ```
 
 
-
-## js避坑指南
-
-### 尽量不用连等操作
-
-连等操作赋值顺序是从右至左,看个例子
-
-```js
-let a = b = 1
-// 等价于
-b = 1
-let a = 1
-// 这会造成b是个全局变量
-```
 

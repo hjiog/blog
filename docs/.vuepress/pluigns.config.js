@@ -34,12 +34,15 @@ module.exports = [
   [
     "meting",
     {
-      auto: "https://music.163.com/#/playlist?id=4935340236",
+      // metingApi: 'https://api.i-meto.com/meting/api',
+      // metingApi: 'https://api.injahow.cn/meting',
       // 不配置该项的话不会出现全局播放器
       meting: {
         server: "netease",
         type: "playlist",
-        mid: "4935340236",
+        // 自己的歌单不知为啥使用默认api,数据返回是空的
+        // mid: "4935340236",
+        mid: "6838211960",
       },
       aplayer: {
         lrcType: 3,
