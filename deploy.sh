@@ -16,9 +16,13 @@ git init
 git add -A
 git commit -m 'deploy'
 
-# 如果发布到 https://<USERNAME>.github.io
-git remote add origin git@gitee.com:hjiog/hjiog.git
-git push -f origin master:deploy
+# gitee
+# git remote add origin git@gitee.com:hjiog/hjiog.git
+# git push -f origin master:deploy
+
+# github
+git remote add origin git@github.com:hjiog/blog.git
+git push -f origin master:gh-pages
 
 
 # 如果发布到 https://<USERNAME>.github.io/<REPO>

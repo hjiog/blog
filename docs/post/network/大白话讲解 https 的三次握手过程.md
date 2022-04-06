@@ -31,9 +31,9 @@ categories:
 1. 去阿里云购买并下载，个人试用免费。
 2. 本地用命令行工具生成，如：
 ```bash
-openssl genrsa -des3 -out sgfblog.com.key 1024`
-openssl req -new -key sgfblog.com.key -out sgfblog.com.csr`
-openssl rsa -in sgfblog.com.key -out sgfblog.com.nopass.key`
+openssl genrsa -des3 -out sgfblog.com.key 1024
+openssl req -new -key sgfblog.com.key -out sgfblog.com.csr
+openssl rsa -in sgfblog.com.key -out sgfblog.com.nopass.key
 ```
 
 
