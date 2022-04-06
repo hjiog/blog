@@ -39,3 +39,32 @@ source的所写，表示的是对资源的引用，它指向的内容会嵌入�
 rel 属性用于指定当前文档与被链接文档的关系。
 
 只有在使用了 href 属性才能使用 rel属性。
+
+
+
+## a 标签 download 属性失效
+
+原因：
+
+1. 使用的还是html4.0, download属性是html5才支持的属性。
+2. Href 指定的资源地址跨域。
+
+解决方案：用 js 把资源下载到本地，转换成blob格式，然后使用 window.URL.createObjectURL 读取 blob，创建一个链接，从而解决跨域的问题。
+
+```ts
+const downloadImg = async (url: string, name: string) => {
+  const response = await fetch(url);
+  // 内容转变成blob地址
+  const blob = await response.blob();
+  // 创建隐藏的可下载链接
+  const objectUrl = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  // 地址
+  a.href = objectUrl;
+  // 修改文件名
+  a.download = name;
+  // 触发点击
+  a.click();
+};
+```
+

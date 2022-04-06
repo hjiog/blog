@@ -1161,32 +1161,50 @@ console.log(handle(1, 2)(3)) // 6
 
 ### 2. 分别用深度遍历和广度遍历实现深复制
 
+小知识：
+
+- Object.keys 和 Reflect.ownKeys 有何区别？
+
+Object.keys能返回方法属性，只不过Object.keys返回的是可枚举属性，当设置对象的enumerable设置为false， 那就无法遍历。 Reflect.ownKeys 返回所有的自己属性，不管可枚举还是不可枚举，所以可以遍历出方法属性。
+
 ```js
 "use strict"
 
 function deepClone(source, hash = new WeakMap()) {
-    if (typeof source != "object" || source == null) return source; // 非对象或空对象返回自身
-    if (hash.has(source)) {
-        return hash.get(source); // 若表中存在这个键，则返回该键对应的值，解决克隆时循环引用的问题
-    }
-    let target = Array.isArray(source) ? [] : {}; // 识别是对象还是数组
-    hash.set(source, target);
-    Reflect.ownKeys(source).forEach((key) => { // 这里用Reflect.ownKeys而不用for...in迭代是因为Reflect.ownKeys可以访问Symbol属性
-        /**
-         * 1. 如果使用for...in会把原型链上的其他属性也迭代出来，那么就要多层判断Object.prototype.hasOwnProperty.call(source, key)，
-         * 防止得到属于原型链而不属于source自身的属性，这里使用Reflect.ownKeys，因此可以省去判断
-         * 2. 不直接用source.hasOwnProperty(key)是因为如果source=Object.create(null),
-         那么source就没有继承Object的原型，使得source的hasOwnProperty方法为undefinde
-         */
-        if (typeof source[key] == "object" && source[key] != null) {
-            target[key] = deepClone(source[key], hash);
-        } else {
-            target[key] = source[key];
-        }
-    });
-    return target;
+  if (typeof source != "object" || source == null) return source; // 非对象或空对象返回自身
+  if (hash.has(source)) {
+      return hash.get(source); // 若表中存在这个键，则返回该键对应的值，解决克隆时循环引用的问题
+  }
+  let target = Array.isArray(source) ? [] : {}; // 识别是对象还是数组
+  hash.set(source, target);
+  Reflect.ownKeys(source).forEach((key) => { // 这里用Reflect.ownKeys而不用for...in迭代是因为Reflect.ownKeys可以访问Symbol属性
+      /**
+       * 1. 如果使用for...in会把原型链上的其他属性也迭代出来，那么就要多层判断Object.prototype.hasOwnProperty.call(source, key)，
+       * 防止得到属于原型链而不属于source自身的属性，这里使用Reflect.ownKeys，因此可以省去判断
+       * 2. 不直接用source.hasOwnProperty(key)是因为如果source=Object.create(null),
+       那么source就没有继承Object的原型，使得source的hasOwnProperty方法为undefinde
+       */
+       if (source[key] instanceof Date) {
+        // 判断日期类型
+        target[key] = new Date(source[key].getTime());
+      } else if (source[key] instanceof RegExp) {
+        // 判断正则类型
+        target[key] = new RegExp(source[key]);
+       }
+       else if ((typeof source[key] === 'object') && source[key].nodeType === 1) {
+        // 判断 DOM 元素节点
+        let domEle = document.getElementsByTagName(source[key].nodeName)[0];
+        target[key] = domEle.cloneNode(true);
+       }
+      // 当元素属于对象（排除 Date、RegExp、DOM）类型时递归拷贝
+       else if (typeof source[key] == "object" && source[key] != null) {
+          target[key] = deepClone(source[key], hash);
+      } else {
+          target[key] = source[key];
+      }
+  });
+  return target;
 }
-
 
 function deepClone2(source) {
     if (typeof source != "object" || source == null) return source; // 非对象或空对象返回自身

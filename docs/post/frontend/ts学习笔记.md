@@ -1,11 +1,9 @@
----
 title: ts学习笔记
 date: 2021-03-13
 tags:
  - ts
 categories:
  - 前端
----
 
 
 
@@ -30,6 +28,19 @@ let y = () => ({name: 'Alice', location: 'Seattle'});
 x = y; // OK
 y = x; // Error, because x() lacks a location property
 ```
+
+
+
+## 特殊语法
+
+```ts
+// -？ 代表将可选值变成必需的属性
+type Required<T> = {
+    [P in keyof T]-?: T[P];
+};
+```
+
+
 
 
 
@@ -139,9 +150,9 @@ type TypeA<T> = T extends number ? 1 : 2
 type TypeB = Test extends number ? 1 : 2
 type TypeC<T> = number extends T ? 1 : 2
 
-const a: TypeA<Test> = 1 // const aa: 1 | 2
-const b: TypeB = 1 // const bb: 2
-const c: TypeC<Test> = 1 // const cc: 1
+const a: TypeA<Test> = 1 // const a: 1 | 2
+const b: TypeB = 1 // const b: 2
+const c: TypeC<Test> = 1 // const c: 1
 ```
 
 2. 同一类型变量的多个候选类型将会被推断为交叉类型
@@ -285,7 +296,14 @@ type test = {
 }
 ```
 
+Parameters: 获取函数参数的类型
+```ts
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 
+type fn = (a:string)=>void
+
+type test = Parameters<typeof fn>[0] // string
+```
 
 ## 常见的需求
 
@@ -507,3 +525,105 @@ export interface TooltipProps {
 }
 ```
 
+
+
+
+
+
+
+## 疑问
+
+1. ```ts
+    // 一下两种写法有何不同？哪种更好？
+   type fn = <T extends Function>(callback: T) => void;
+   type fn = (callback: Function) => void;
+   ```
+
+2. 
+
+## 踩坑
+函数参数记得用交叉类型。
+```ts
+// 定义函数类型
+type Action1<T> = ((v:T)=>T)|T
+type Action2<T> = ((v:T)=>T)&T
+
+// 联合类型作为函数参数，错误
+type wrong<T> =(v:Action1<T>)=>void
+// 交叉类型作为函数参数，正确
+type correct<T> =(v:Action2<T>)=>void
+
+const action1:wrong<string> = (v)=>{
+  /**
+   * This expression is not callable.
+   * Not all constituents of type 'Action1<string>' are callable.
+   * Type 'string' has no call signatures.
+   * */
+  v('test')
+}
+
+const action2:correct<string> = (v)=>{
+  /** correct */
+  v('test')
+}
+```
+
+
+setState 如何做到只更新部分值？
+```ts
+// 1. 错误的写法
+export type SetState2<T extends object, K1 extends keyof T = keyof T> =(partial:((state: T) => Pick<T,K1>))=>void
+
+const setState2:SetState2<Test> = (partial)=>{
+  console.log(partial)
+}
+
+/**
+ * Property 'inc' is missing in type '{ count: number; }' but required in type 'Pick<Test, keyof Test>'.
+ * 原因是类型没有写完整，但是 setState 又需要可以更新部分字段怎么办呢？
+*/
+setState2(state=>({
+  count:1,
+}))
+
+
+// 2. 正确的写法
+export type SetState1<T extends object> = {
+  <
+    K1 extends keyof T,
+  >(
+    partial:((state: T) => Pick<T,K1>)
+  ): void
+}
+
+const setState1:SetState1<Test> = (partial)=>{
+  console.log(partial)
+}
+
+setState1(state=>({
+  count:1,
+}))
+
+/**
+ * 理解
+ * K1 仅在运行时起作用，目的是约束并反射参数的类型，如 partial，注意只能反射参数类型，对返回值的类型是不能反射的
+ * 若需要对返回值约束要用到 T，看下下面的例子：
+ */
+
+ export type SetState1<T extends object> = {
+  <
+    K1 extends keyof T,
+    K2 extends number,
+    K3 extends object,
+  >(
+    // 约束 partial 为 T 的子集，同时在调用实际的函数时，K1 也会反射出实际的 key
+    partial:((state: T) => Pick<T,K1>),
+    // 可再次使用 K1
+    partialCopy:Pick<T,K1>,
+    // 约束 count 为数字类型，同时在调用实际的函数时，K2 也会反射出实际的数字
+    count:K2,
+    // 约束 obj 为 object 类型，同时在调用实际的函数时，K3 也会反射出实际的对象
+    obj:K3
+    // 下面返回值用了 K3 是错误的，使用时会 K3 并不会自动和实际返回值类型绑定,应该用 T
+  ): K3
+}```

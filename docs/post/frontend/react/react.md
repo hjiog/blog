@@ -189,12 +189,12 @@ function reducer(state, action) {
 }
 
 function Counter({initialCount}) {
-  const [state, dispatch] = useReducer(reducer, initialCount, init);  
+  const [state, dispatch] = useReducer(reducer, initialCount, init);
     return (
     <>
       Count: {state.count}
       <button
-        onClick={() => dispatch({type: 'reset', payload: initialCount})}>        
+        onClick={() => dispatch({type: 'reset', payload: initialCount})}>
     	Reset
       </button>
       <button onClick={() => dispatch({type: 'decrement'})}>-</button>
@@ -298,7 +298,7 @@ function Users() {
 
 
 
-Q: <Link> 标签和 <a> 标签有什么区别?
+Q: `<Link>` 标签和 `<a>` 标签有什么区别?
 
 > 从最终渲染的 DOM 来看，这两者都是链接，都是 `<a>` 标签，区别是：
 > `<Link>` 是 react-router 里实现路由跳转的链接，一般配合 `<Route>` 使用，react-router 接管了其默认的链接跳转行为，区别于传统的页面跳转，`<Link>` 的“跳转”行为只会触发相匹配的 `<Route>` 对应的页面内容更新，而不会刷新整个页面。

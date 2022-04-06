@@ -27,7 +27,9 @@ https://juejin.cn/post/6844904007362674701#heading-21
 
 - babel-loader：把 ES6 转换成 ES5
 
-- css-loader：加载 CSS，支持模块化、压缩、文件导入等特性
+- css-loader：解析css文件中的@import和url语句，处理css-modules，并将结果作为一个js模块返回
+
+- style-loader: 以style标签的方式将css插入DOM树中。
 
 - eslint-loader：通过 ESLint 检查 JavaScript 代码
 
@@ -142,7 +144,7 @@ module.exports = {
           fix: true,
         },
       },
-      
+
       // 使用oneOf优化匹配效率，在oneOf里面的规则只会命中一次，不用oneOf的话，每个文件都要检查一下，
       // 但要注意，在oneOf里面的loader不能处理同一类型的文件，如对js处理的两个loader就不能一起放在oneOf里面
       oneOf:[
@@ -489,8 +491,8 @@ document.getElementById('btn').onclick = function() {
   test: /\.js$/,
   exclude: /node_modules/,
   use: [
-    /* 
-      thread-loader会对其后面的loader（这里是babel-loader）开启多进程打包。 
+    /*
+      thread-loader会对其后面的loader（这里是babel-loader）开启多进程打包。
       进程启动大概为600ms，进程通信也有开销。(启动的开销比较昂贵，不要滥用)
       只有工作消耗时间比较长，才需要多进程打包
       注意顺序,thread-loader一定是放前面,进而在babel-loader之后执行

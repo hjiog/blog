@@ -23,14 +23,14 @@ yarn
 
 ## 错误处理
 
-1. 我们知道使用Promise<T>可以指定resolve返回的值的类型，但是能否指定reject的类型呢？
+1. 我们知道使用Promise\<T\>可以指定resolve返回的值的类型，但是能否指定reject的类型呢？
 
 例如指定axios的返回值类型为Promise<AxiosResponse,AxiosError>
 
 > ps:这种语法是错误的，这里只是举例，实际上Promise接口只能接受一个参数
 
 ```ts
-axios({ 
+axios({
   method: 'get',
   url: '/error',
 }).then((res) => {
@@ -49,7 +49,7 @@ axios({
 3. 换种写法？
 
 ```ts
-axios({ 
+axios({
   method: 'get',
   url: '/error',
 }).then((res) => {
@@ -71,7 +71,7 @@ axios({
 function isAxiosError(err): err is AxiosError {
   return err.isAxiosError
 }
-axios({ 
+axios({
   method: 'get',
   url: '/error',
 }).then((res) => {

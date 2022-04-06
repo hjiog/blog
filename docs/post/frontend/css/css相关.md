@@ -365,10 +365,6 @@ width: calc(100% - 10px);
 
 
 
-
-
-
-
 ## 三栏布局的3种实现
 
 - 浮动布局
@@ -816,7 +812,15 @@ text-overflow: ellipsis; // 溢出用省略号显示
 display: -webkit-box; // 将对象作为弹性伸缩盒子模型显示。
 -webkit-line-clamp: 2; // 这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
 -webkit-box-orient: vertical;  // 从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+
+overflow: hidden; 
+text-overflow: ellipsis; 
+display: -webkit-box;
+-webkit-line-clamp: 2; 
+-webkit-box-orient: vertical; 
 ```
+
+
 
 
 

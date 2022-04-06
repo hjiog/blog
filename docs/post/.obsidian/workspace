@@ -1,0 +1,139 @@
+{
+  "main": {
+    "id": "7bbe33b689e1e7d3",
+    "type": "split",
+    "children": [
+      {
+        "id": "3859712ecbc69bb9",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "network/大白话讲解 https 的三次握手过程.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bc1598a894dddbb7",
+    "type": "split",
+    "children": [
+      {
+        "id": "9fac305dbc7e24bc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ca6e228e631b6ff7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "9dbefaab90b8f4d3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "c0999930571043ec",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          },
+          {
+            "id": "6566cc230a75a0b8",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "network/大白话讲解 https 的三次握手过程.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 333
+  },
+  "right": {
+    "id": "56eae31c238c3f41",
+    "type": "split",
+    "children": [
+      {
+        "id": "893d02c258764c1c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9a3babd7e154b878",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "network/大白话讲解 https 的三次握手过程.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "4b1814968b297249",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "network/大白话讲解 https 的三次握手过程.md"
+              }
+            }
+          },
+          {
+            "id": "ebb4cf71af6aee76",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "active": "3859712ecbc69bb9",
+  "lastOpenFiles": [
+    "network/大白话讲解 https 的三次握手过程.md",
+    "https.jpeg",
+    "network/网络相关.md",
+    "frontend/浏览器相关.md",
+    "frontend/如何优雅地去掉 selector.md",
+    "frontend/zustand源码解读.md",
+    "frontend/ts学习笔记.md",
+    "micro-app 原理解析_2022-02-27 15.53.54.excalidraw.md",
+    "frontend/micro-app 原理解析.md",
+    "frontend/js.md"
+  ]
+}
